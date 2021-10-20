@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.*;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -40,7 +41,7 @@ class ApplicationTests {
 	}
 	
 	@Test
-	//@Transactional
+	@Transactional
 	@Rollback
 	void testGetList() throws Exception {
 		  request.put("http://localhost:8081/create", null);

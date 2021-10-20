@@ -1,6 +1,9 @@
 package com.example.demo;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +13,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.dao.movieObj;
+
 @RestController
 public class Controller {
 
 	Services service = new Services();
+	movieObj movie = new movieObj();
 	
     @GetMapping("/")
     public String HelloSpring(){
@@ -21,23 +27,19 @@ public class Controller {
         return "My First Spring Application";
     }
     
-    @PutMapping("/create")
-    public List<String> create() {
-    	return service.createList();
-    }
     
     @PostMapping("/update") 
-    public void update(@RequestBody String sens) {
-    	service.addToList(sens);
+    public void update(@RequestBody movieObj movie) {
+    	service.addToList(movie);
     }
     
-    @DeleteMapping("/delete/{listItem}")
-    public void delete(@PathVariable("listItem") String sens) {
-    	service.deleteFromList(sens);
+    @DeleteMapping("/delete/{title}")
+    public void delete(@PathVariable("title") String title) {
+    	service.deleteFromList(title);
     }
     
     @GetMapping("/viewList")
-    public List<String> viewList() {
+    public Set<Entry<String, movieObj>> viewList() {
     	return service.getList();
     }
  
