@@ -10,22 +10,26 @@ import java.util.Set;
 import com.example.dao.movieObj;
 
 public class Services {
-	Map<String, movieObj> list = new HashMap<String, movieObj>();
+	List<movieObj> list = new ArrayList<movieObj>();
 	
 	public void updateList(movieObj movie) {
-		this.list.put(movie.getTitle(), movie);
+		this.list.add(movie);
 	}
 	
 	public movieObj addToList(movieObj movie) {
-		this.list.put(movie.getTitle(), movie);
+		this.list.add(movie);
 		return movie;
 	}
 	
-	public void deleteFromList(String title) {
-		this.list.remove(title);
+	public void deleteFromList(String movieTitle) {
+		for(movieObj movie: this.list) {
+			if (movie.getTitle().equals(movieTitle)) {
+				this.list.remove(movie);
+			}
+		}
 	}
 
-	public Set<Entry<String, movieObj>> getList() {
-		return this.list.entrySet();
+	public List<movieObj> getList() {
+		return this.list;
 	}
 }

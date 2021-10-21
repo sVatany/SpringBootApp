@@ -39,7 +39,7 @@ public class Controller {
     }
     
     @GetMapping("/viewList")
-    public Set<Entry<String, movieObj>> viewList() {
+    public List<movieObj> viewList() {
     	return service.getList();
     }
  
