@@ -16,8 +16,9 @@ public class Services {
 		this.list.put(movie.getTitle(), movie);
 	}
 	
-	public void addToList(movieObj movie) {
+	public movieObj addToList(movieObj movie) {
 		this.list.put(movie.getTitle(), movie);
+		return movie;
 	}
 	
 	public void deleteFromList(String title) {

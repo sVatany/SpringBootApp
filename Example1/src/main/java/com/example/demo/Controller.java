@@ -29,8 +29,8 @@ public class Controller {
     
     
     @PostMapping("/update") 
-    public void update(@RequestBody movieObj movie) {
-    	service.addToList(movie);
+    public movieObj update(@RequestBody movieObj movie) {
+    	return service.addToList(movie);
     }
     
     @DeleteMapping("/delete/{title}")
