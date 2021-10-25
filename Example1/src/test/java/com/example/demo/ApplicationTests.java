@@ -34,7 +34,6 @@ import com.example.dao.movieRating;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringBootTest
@@ -203,27 +202,67 @@ class ApplicationTests {
         movieObj movie = moviesList.get(0);
 
         User user = new User("nicky");
-        //this.userRepository.save(user);
+        
 
         String movieRatingStr = getJSON("resources/userRating.json");
 
         movieRating movieRating = mapper.readValue(movieRatingStr, movieRating.class);
 
-        RequestBuilder request = post("/user/userRating")
+        RequestBuilder request = post("/user/addAUserRating")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(movieRatingStr);
 
         this.mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title", is(movie.getTitle())))
-                .andExpect(jsonPath("$.data.director", is(movie.getDirector())))
-                .andExpect(jsonPath("$.data.actors", is(movie.getActors())))
-                .andExpect(jsonPath("$.data.release", is(movie.getRelease())))
-                .andExpect(jsonPath("$.data.description", is(movie.getDescription())))
-                .andExpect(jsonPath("$.data.rating", is((double) movieRating.getRating())));
+                .andExpect(jsonPath("$.movieTitle", is(movie.getTitle())))
+                .andExpect(jsonPath("$.reviews", is(movieRating.getReviews())))
+                .andExpect(jsonPath("$.userName", is(movieRating.getUserName())))
+                .andExpect(jsonPath("$.rating", is(movieRating.getRating())));
 	}
 	
 	@Test
+    //@Transactional
+    @Rollback
+    public void testManyMovieRatings() throws Exception {
+
+        createMockManyMovies();
+        List<movieObj> moviesList = this.listOfMovies;
+        movieObj movie = moviesList.get(0);
+
+        User user1 = new User("nicky");
+        User user2 = new User("mike");
+        
+        String movieRatingStr1 = getJSON("resources/userRating.json");
+
+        String movieRatingStr2 = getJSON("resources/mikeUserRating.json");
+
+
+        RequestBuilder request1 = post("/user/addAUserRating")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(movieRatingStr1);
+
+        RequestBuilder request2 = post("/user/addAUserRating")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(movieRatingStr2);
+
+        this.mvc.perform(request1)
+                .andExpect(status().isOk());
+
+        this.mvc.perform(request2)
+                .andExpect(status().isOk());
+        
+        RequestBuilder request3 = get("/getMovie/" + movie.getTitle());
+        
+        this.mvc.perform(request3).andExpect(status().isOk())
+        .andExpect(jsonPath("$.title", is(movie.getTitle())))
+        .andExpect(jsonPath("$.director", is(movie.getDirector())))
+        .andExpect(jsonPath("$.actors", is(movie.getActors())))
+        .andExpect(jsonPath("$.release", is(movie.getRelease())))
+        .andExpect(jsonPath("$.description", is(movie.getDescription())))
+        .andExpect(jsonPath("$.rating", is(4.0)));
+    }
+	
+/*	@Test
 	@Rollback
 	void testDeleteFromList() throws Exception {
 		this.createMockData1();
@@ -258,45 +297,45 @@ class ApplicationTests {
         .andExpect(jsonPath("$[0].actors", is(movie1.getActors())))
         .andExpect(jsonPath("$[0].release", is(movie1.getRelease())))
         .andExpect(jsonPath("$[0].description", is(movie1.getDescription())));
-	}
+	}*/
 	
-//	@Test
-//	@Rollback
-//	void testDeleteFromList2() throws Exception {
-//		this.createMockData1();
-//		movieObj movie1 = this.moiveEx;
-//		
-//		RequestBuilder viewList = get("/viewList");
-//		
-//		this.createMockData2();
-//		movieObj movie2 = this.moiveEx;
-//		
-//		
-////		this.mvc.perform(viewList)
-////		.andExpect(status().isOk())
-////        .andExpect(jsonPath("$[0].title", is(movie1.getTitle())))
-////        .andExpect(jsonPath("$[0].director", is(movie1.getDirector())))
-////        .andExpect(jsonPath("$[0].actors", is(movie1.getActors())))
-////        .andExpect(jsonPath("$[0].release", is(movie1.getRelease())))
-////        .andExpect(jsonPath("$[0].description", is(movie1.getDescription())))
-////        .andExpect(jsonPath("$[1].title", is(movie2.getTitle())))
-////		.andExpect(jsonPath("$[1].director", is(movie2.getDirector())))
-////        .andExpect(jsonPath("$[1].actors", is(movie2.getActors())))
-////        .andExpect(jsonPath("$[1].release", is(movie2.getRelease())))
-////        .andExpect(jsonPath("$[1].description", is(movie2.getDescription())));
-//		
-//		
-//		RequestBuilder delete = delete("/delete/" + movie1.getTitle());
-//		this.mvc.perform(delete).andExpect(status().isOk());
-//		
-//		
+	@Test
+	@Rollback
+	void testDeleteFromList2() throws Exception {
+		this.createMockData1();
+		movieObj movie1 = this.moiveEx;
+		
+		RequestBuilder viewList = get("/viewList");
+		
+		this.createMockData2();
+		movieObj movie2 = this.moiveEx;
+		
+		
 //		this.mvc.perform(viewList)
 //		.andExpect(status().isOk())
-//        .andExpect(jsonPath("$[0].title", is(movie2.getTitle())))
-//        .andExpect(jsonPath("$[0].director", is(movie2.getDirector())))
-//        .andExpect(jsonPath("$[0].actors", is(movie2.getActors())))
-//        .andExpect(jsonPath("$[0].release", is(movie2.getRelease())))
-//        .andExpect(jsonPath("$[0].description", is(movie2.getDescription())));
-//	}
+//        .andExpect(jsonPath("$[0].title", is(movie1.getTitle())))
+//        .andExpect(jsonPath("$[0].director", is(movie1.getDirector())))
+//        .andExpect(jsonPath("$[0].actors", is(movie1.getActors())))
+//        .andExpect(jsonPath("$[0].release", is(movie1.getRelease())))
+//        .andExpect(jsonPath("$[0].description", is(movie1.getDescription())))
+//        .andExpect(jsonPath("$[1].title", is(movie2.getTitle())))
+//		.andExpect(jsonPath("$[1].director", is(movie2.getDirector())))
+//        .andExpect(jsonPath("$[1].actors", is(movie2.getActors())))
+//        .andExpect(jsonPath("$[1].release", is(movie2.getRelease())))
+//        .andExpect(jsonPath("$[1].description", is(movie2.getDescription())));
+		
+		
+		RequestBuilder delete = delete("/delete/" + movie1.getTitle());
+		this.mvc.perform(delete).andExpect(status().isOk());
+		
+		
+		this.mvc.perform(viewList)
+		.andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].title", is(movie2.getTitle())))
+        .andExpect(jsonPath("$[0].director", is(movie2.getDirector())))
+        .andExpect(jsonPath("$[0].actors", is(movie2.getActors())))
+        .andExpect(jsonPath("$[0].release", is(movie2.getRelease())))
+        .andExpect(jsonPath("$[0].description", is(movie2.getDescription())));
+	}
 
 }

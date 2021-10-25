@@ -2,17 +2,17 @@ package com.example.dao;
 
 public class movieRating {
 	
-	private String movieName;
+	private String movieTitle;
 	private int rating;
-	private String review;
+	private String reviews;
 	private String userName;
 	
-	public String getMovieName() {
-		return movieName;
+	public String getMovieTitle() {
+		return movieTitle;
 	}
 	
-	public void setMovieName(String movieName) {
-		this.movieName = movieName;
+	public void setMovieName(String movieTitle) {
+		this.movieTitle = movieTitle;
 	}
 	
 	public int getRating() {
@@ -23,12 +23,12 @@ public class movieRating {
 		this.rating = rating;
 	}
 	
-	public String getReview() {
-		return review;
+	public String getReviews() {
+		return reviews;
 	}
 	
-	public void setReview(String review) {
-		this.review = review;
+	public void setReview(String reviews) {
+		this.reviews = reviews;
 	}
 	
 	public String getUserName() {

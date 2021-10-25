@@ -55,18 +55,11 @@ public class Controller {
     	return service.getMovieByTitle(title);
     }
     
-    @PostMapping("/user/addRating")
+    @PostMapping("/user/addAUserRating")
     public movieRating addARating(@RequestBody movieRating rating) {
-    	return null;
+    	return service.addAMovieRating(rating);
     }
     
-//    @GetMapping("/getMovie/{title}")
-//    public com.example.demo.MovieDetailResponse getMovieV2(@PathVariable("title") String title) {
-//    	movieObj movie = service.getMovieByTitle(title);
-//        if (movie != null)
-//            return new MovieDetailResponse(HttpStatus.FOUND.value(), Constants.SUCCESS, movie);
-//
-//        return new MovieDetailResponse(HttpStatus.NOT_FOUND.value(), Constants.NOT_FOUND, null);
-//    }
+    
  
 }
