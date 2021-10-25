@@ -12,8 +12,12 @@ import com.example.dao.movieObj;
 public class Services {
 	List<movieObj> list = new ArrayList<movieObj>();
 	
-	public void updateList(movieObj movie) {
-		this.list.add(movie);
+	//create a method that takes in a entire list
+	public List<movieObj> updateList(List<movieObj> movies) {
+		for (movieObj movie: movies) {
+			this.list.add(movie);
+		}
+		return movies;
 	}
 	
 	public movieObj addToList(movieObj movie) {
@@ -21,15 +25,26 @@ public class Services {
 		return movie;
 	}
 	
-	public void deleteFromList(String movieTitle) {
+	public List<movieObj> deleteFromList(String movieTitle) {
 		for(movieObj movie: this.list) {
 			if (movie.getTitle().equals(movieTitle)) {
 				this.list.remove(movie);
 			}
 		}
+		return this.list;
 	}
 
 	public List<movieObj> getList() {
 		return this.list;
 	}
+
+	public movieObj getMovieByTitle(String title) {
+		// TODO Auto-generated method stub
+		for(movieObj movie: this.list) {
+			if (movie.getTitle().equals(title))
+				return movie;
+		}
+		return null;
+	}
+	 
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.movieObj;
+import com.example.dao.movieRating;
 
 @RestController
 public class Controller {
@@ -34,13 +36,37 @@ public class Controller {
     }
     
     @DeleteMapping("/delete/{title}")
-    public void delete(@PathVariable("title") String title) {
-    	service.deleteFromList(title);
+    public List<movieObj> delete(@PathVariable("title") String title) {
+    	return service.deleteFromList(title);
     }
     
     @GetMapping("/viewList")
     public List<movieObj> viewList() {
     	return service.getList();
     }
+    
+    @PostMapping("/addList")
+    public List<movieObj> addManyMovies(@RequestBody List<movieObj> movies) {
+    	return service.updateList(movies);
+    }
+    
+    @GetMapping("/getMovie/{title}")
+    public movieObj getMovie(@PathVariable("title") String title) {
+    	return service.getMovieByTitle(title);
+    }
+    
+    @PostMapping("/user/addRating")
+    public movieRating addARating(@RequestBody movieRating rating) {
+    	return null;
+    }
+    
+//    @GetMapping("/getMovie/{title}")
+//    public com.example.demo.MovieDetailResponse getMovieV2(@PathVariable("title") String title) {
+//    	movieObj movie = service.getMovieByTitle(title);
+//        if (movie != null)
+//            return new MovieDetailResponse(HttpStatus.FOUND.value(), Constants.SUCCESS, movie);
+//
+//        return new MovieDetailResponse(HttpStatus.NOT_FOUND.value(), Constants.NOT_FOUND, null);
+//    }
  
 }
